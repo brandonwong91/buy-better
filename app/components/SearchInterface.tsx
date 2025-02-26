@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { currencyMapping } from '../utils/currencyMapping';
 
 interface SearchFormData {
   productName: string;
@@ -27,6 +28,33 @@ export default function SearchInterface({ onSearch }: SearchInterfaceProps) {
     homeCountry: 'Singapore',
     visitingCountry: 'Malaysia'
   });
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+  const [isLoadingRate, setIsLoadingRate] = useState(false);
+
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      setIsLoadingRate(true);
+      try {
+        const fromCurrency = currencyMapping[formData.homeCountry].code;
+        const toCurrency = currencyMapping[formData.visitingCountry].code;
+        const response = await fetch(
+          `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`
+        );
+        const data = await response.json();
+        const rate = data.rates[toCurrency];
+        setExchangeRate(rate);
+      } catch (error) {
+        console.error('Error fetching exchange rate:', error);
+        setExchangeRate(null);
+      } finally {
+        setIsLoadingRate(false);
+      }
+    };
+
+    if (formData.homeCountry && formData.visitingCountry) {
+      fetchExchangeRate();
+    }
+  }, [formData.homeCountry, formData.visitingCountry]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +93,7 @@ export default function SearchInterface({ onSearch }: SearchInterfaceProps) {
             >
               {countries.map((country) => (
                 <option key={country} value={country}>
-                  {country}
+                  {country} ({currencyMapping[country].symbol})
                 </option>
               ))}
             </select>
@@ -84,11 +112,21 @@ export default function SearchInterface({ onSearch }: SearchInterfaceProps) {
             >
               {countries.map((country) => (
                 <option key={country} value={country}>
-                  {country}
+                  {country} ({currencyMapping[country].symbol})
                 </option>
               ))}
             </select>
           </div>
+        </div>
+
+        <div className="text-center text-sm">
+          {isLoadingRate ? (
+            <span>Loading exchange rate...</span>
+          ) : exchangeRate ? (
+            <span>
+              1 {currencyMapping[formData.homeCountry].symbol} = {exchangeRate.toFixed(4)} {currencyMapping[formData.visitingCountry].symbol}
+            </span>
+          ) : null}
         </div>
 
         <button
