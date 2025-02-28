@@ -108,9 +108,10 @@ async function searchProducts(
           throw new Error(`Invalid or missing link for product at index ${index}`);
         }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to parse or validate Gemini response:', error);
-      throw new Error(`Failed to parse product data: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(`Failed to parse product data: ${errorMessage}`);
     }
 
     // Validate and clean up the products

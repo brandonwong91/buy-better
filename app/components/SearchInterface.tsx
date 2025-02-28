@@ -7,6 +7,7 @@ interface SearchFormData {
   productName: string;
   homeCountry: string;
   visitingCountry: string;
+  exchangeRate?: number | null;
 }
 
 const countries = [
@@ -58,7 +59,10 @@ export default function SearchInterface({ onSearch }: SearchInterfaceProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(formData);
+    onSearch({
+      ...formData,
+      exchangeRate
+    });
   };
 
   return (

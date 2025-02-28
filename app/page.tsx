@@ -16,6 +16,7 @@ interface SearchFormData {
   productName: string;
   homeCountry: string;
   visitingCountry: string;
+  exchangeRate?: number | null;
 }
 
 export default function Home() {
@@ -24,7 +25,8 @@ export default function Home() {
     visitingResults: [] as Product[],
     homeCountry: '',
     visitingCountry: '',
-    isLoading: false
+    isLoading: false,
+    exchangeRate: undefined as number | null | undefined
   });
 
   const handleSearch = async (formData: SearchFormData) => {
@@ -32,7 +34,8 @@ export default function Home() {
       ...prev,
       isLoading: true,
       homeCountry: formData.homeCountry,
-      visitingCountry: formData.visitingCountry
+      visitingCountry: formData.visitingCountry,
+      exchangeRate: formData.exchangeRate
     }));
 
     try {
