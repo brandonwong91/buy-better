@@ -29,5 +29,29 @@ export const currencyMapping: CurrencyMapping = {
   Philippines: {
     code: 'PHP',
     symbol: '₱'
+  },
+  'United States': {
+    code: 'USD',
+    symbol: '$'
+  },
+  'United Kingdom': {
+    code: 'GBP',
+    symbol: '£'
+  },
+  'European Union': {
+    code: 'EUR',
+    symbol: '€'
+  },
+  Japan: {
+    code: 'JPY',
+    symbol: '¥'
+  },
+  Australia: {
+    code: 'AUD',
+    symbol: 'A$'
+  },
+  Canada: {
+    code: 'CAD',
+    symbol: 'C$'
   }
 };

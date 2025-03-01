@@ -16,7 +16,13 @@ const countries = [
   'Indonesia',
   'Thailand',
   'Vietnam',
-  'Philippines'
+  'Philippines',
+  'United States',
+  'United Kingdom',
+  'European Union',
+  'Japan',
+  'Australia',
+  'Canada'
 ];
 
 interface SearchInterfaceProps {
