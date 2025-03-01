@@ -114,14 +114,19 @@ async function searchProducts(
       throw new Error(`Failed to parse product data: ${errorMessage}`);
     }
 
-    // Validate and clean up the products
-    return products.map(product => ({
-      title: product.title || 'Unknown Product',
-      price: product.price || 'Price not available',
-      store: product.store || 'Unknown Store',
-      link: product.link || '#',
-      image: '' // Gemini doesn't provide images
-    }));
+    // Validate and clean up the products and generate Google search URLs
+    return products.map(product => {
+      const searchQuery = encodeURIComponent(`${product.title} ${product.store} ${country}`);
+      const googleSearchUrl = `https://www.google.com/search?q=${searchQuery}`;
+      
+      return {
+        title: product.title || 'Unknown Product',
+        price: product.price || 'Price not available',
+        store: product.store || 'Unknown Store',
+        link: googleSearchUrl,
+        image: '' // Gemini doesn't provide images
+      };
+    });
 
   } catch (error) {
     console.error('Search error:', error);
